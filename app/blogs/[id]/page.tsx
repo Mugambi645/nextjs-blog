@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { blogStore, likeBlog } from '../data' // Import our shared action
+import { getBlogById, likeBlog } from '../data' // Import our shared action
 
 interface BlogPageProps {
   params: Promise<{
@@ -10,9 +10,9 @@ interface BlogPageProps {
 
 export default async function BlogDetailPage({ params }: BlogPageProps) {
   const resolvedParams = await params
-  const { id } = resolvedParams
+  const id = Number(resolvedParams.id)
 
-  const blog = blogStore.find((b) => b.id === id)
+  const blog = await getBlogById(id)
 
   if (!blog) {
     notFound()

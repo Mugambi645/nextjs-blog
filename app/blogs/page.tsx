@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { blogStore } from './data'
+import { getBlogs } from './data'
 
 export const dynamic = 'force-dynamic'
 
@@ -14,8 +14,10 @@ export default async function BlogsPage({ searchParams }: BlogsPageProps) {
   const resolvedParams = await searchParams
   const currentFilter = resolvedParams.filter?.toLowerCase() || ''
 
+  const allBlogs = await getBlogs()
+
   // 1. Filter the blogs array based on the query parameter string match
-  const filteredBlogs = blogStore.filter((blog) =>
+  const filteredBlogs = allBlogs.filter((blog) =>
     blog.title.toLowerCase().includes(currentFilter)
   )
 

@@ -1,39 +1,6 @@
-import { redirect } from 'next/navigation'
-import { revalidatePath } from 'next/cache'
-import { blogStore } from '../data'
+import { createBlog } from '../data'
 
 export default function NewBlogPage() {
-  
-  // This is the Server Action that runs directly on the backend server upon submission
-  async function createBlog(formData: FormData) {
-    'use server'
-
-    const title = formData.get('title') as string
-    const author = formData.get('author') as string
-    const url = formData.get('url') as string
-
-    // Simple validation rule guard
-    if (!title || !author || !url) {
-      return
-    }
-
-    // Append new blog entry to our server store state
-    blogStore.push({
-      id: Math.random().toString(36).substring(2, 9), // Temporary unique random string ID simulation
-      title,
-      author,
-      url,
-      likes: 0
-    })
-
-    // CRITICAL FOR PRODUCTION MODE: Instructs Next.js to purge its static build-time cache
-    // and re-render /blogs on the next cycle so your update immediately appears.
-    revalidatePath('/blogs')
-    
-    // Send the user back to the updated dashboard view
-    redirect('/blogs')
-  }
-
   return (
     <div className="py-6 max-w-md">
       <h1 className="text-3xl font-bold mb-6">Create a New Blog</h1>
